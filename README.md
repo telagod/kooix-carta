@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README.zh-CN.md)
+
 # @kooix/carta-mcp
 
 `@kooix/carta-mcp` is a Model Context Protocol (MCP) server that standardises how IDE/agent clients discover project "cards" (file and directory metadata) and apply bounded edits inside annotated regions. It exposes four MCP tools ready for consumption by Codex CLI, Claude Code, Gemini CLI, OpenCode, and similar runtimes.
@@ -10,12 +12,12 @@
 - **Typed SDK integration** – implemented in TypeScript with MCP stdio transport and a CLI launcher.
 
 ## Installation
-1. Navigate to the [GitHub Releases](https://github.com/<your-org>/kooix-carta/releases) page and download the latest `*.tgz` asset produced by the `Release` workflow.
+1. Download the latest packaged tarball from the [GitHub Releases](https://github.com/telagod/kooix-carta/releases) page. Each release publishes a `kooix-carta-mcp-*.tgz` asset.
 2. Install the tarball locally:
    ```bash
    npm install /path/to/kooix-carta-mcp-x.y.z.tgz
    # or reference the release asset URL directly
-   npm install https://github.com/<your-org>/kooix-carta/releases/download/vx.y.z/kooix-carta-mcp-x.y.z.tgz
+   npm install https://github.com/telagod/kooix-carta/releases/download/vx.y.z/kooix-carta-mcp-x.y.z.tgz
    ```
 3. Optional: install `better-sqlite3` if you plan to use SQLite audit mode:
    ```bash
@@ -35,7 +37,7 @@ npx @kooix/carta-mcp serve --root . --audit jsonl
 
 Register the CLI with your preferred MCP client, for example:
 ```bash
-claude mcp add kooix-carta -- npx -y @kooix/carta-mcp serve --root .
+claude mcp add kooix-carta -- npx -y @kooix-carta-mcp serve --root .
 ```
 
 ## Exposed MCP tools
@@ -100,13 +102,13 @@ The project targets Node.js 18.18+ and TypeScript `moduleResolution: NodeNext`.
 ## Continuous integration
 Two GitHub workflows are provided:
 - `.github/workflows/ci.yml` – runs on push/PR; installs, builds, and tests.
-- `.github/workflows/release.yml` – runs on tagged releases or manual dispatch; builds the package and uploads the `.tgz` artifact to the GitHub Release (or to workflow artifacts when manually triggered).
+- `.github/workflows/release.yml` – runs on tagged pushes (`v*`), GitHub Releases, or manual dispatch; builds the package and uploads the `.tgz` asset to the release (or to workflow artifacts when manually triggered).
 
 ## Publishing
 1. Bump the version in `packages/kooix-carta-mcp/package.json`.
 2. Commit changes and tag the release (`git tag vX.Y.Z`).
-3. Push the tag and create a GitHub Release (or trigger the workflow manually).
-4. The `Release` workflow will produce the `npm pack` tarball and attach it to the release; downloaders can install the asset directly with `npm install`.
+3. Push the tag or create a GitHub Release.
+4. The `Release` workflow will package the project and attach `npm pack` tarballs to the published release; downloaders can install the asset directly with `npm install`.
 
 ## License
 MIT
