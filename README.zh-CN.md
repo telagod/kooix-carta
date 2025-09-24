@@ -4,6 +4,24 @@
 
 `@kooix/carta-mcp` 是一套 Model Context Protocol (MCP) 服务器，实现了统一的“卡片”索引与受控编辑流程，便于 Codex CLI、Claude Code、Gemini CLI、OpenCode 等客户端解析代码仓库元数据并在标注区块内修改文件。
 
+## 快速体验
+无需长期安装，可直接通过 `npx` 执行发布资产：
+```bash
+npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root . --audit jsonl
+```
+将 `v0.1.0` 替换为目标版本标签即可。`npx` 会临时下载 tarball、执行 `carta-mcp` CLI，并在完成后清理安装目录。
+
+若希望离线或重复使用，可先安装 tarball：
+```bash
+npm install https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz
+npx -y carta-mcp serve --root . --audit jsonl
+```
+
+若需使用 SQLite 审计模式，还需额外安装：
+```bash
+npm install better-sqlite3 --save-optional
+```
+
 ## 功能亮点
 - **卡片扫描**：递归解析 `@SFC`（单文件卡片）与 `@DFC`（目录卡片）的 YAML 头部信息，并捕获 `LLM-EDIT` 标记块及其行号、内容哈希。
 - **乐观锁补丁**：基于块内哈希比对和边界校验，确保写入操作安全、可回滚，并保持换行风格一致。
@@ -11,22 +29,9 @@
 - **只读模式**：通过 `--read-only` 参数关闭写操作，仍可提供扫描与读取功能。
 - **TypeScript 实现**：基于 MCP 官方 SDK 的 stdio 传输协议，提供 CLI 启动入口，易于集成。
 
-## 安装
-1. 访问 [GitHub Releases](https://github.com/telagod/kooix-carta/releases)，下载最新的 `kooix-carta-mcp-*.tgz` 资产。
-2. 本地安装该压缩包：
-   ```bash
-   npm install /path/to/kooix-carta-mcp-x.y.z.tgz
-   # 或直接引用发布资源 URL
-   npm install https://github.com/telagod/kooix-carta/releases/download/vx.y.z/kooix-carta-mcp-x.y.z.tgz
-   ```
-3. 若需开启 SQLite 审计模式，可额外安装：
-   ```bash
-   npm install better-sqlite3 --save-optional
-   ```
-
 ## 命令行用法
 ```bash
-npx @kooix/carta-mcp serve --root . --audit jsonl
+npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root . --audit jsonl
 ```
 
 | 参数 | 默认值 | 说明 |
@@ -37,7 +42,7 @@ npx @kooix/carta-mcp serve --root . --audit jsonl
 
 示例：注册到 Claude Code 的本地 MCP 配置：
 ```bash
-claude mcp add kooix-carta -- npx -y @kooix-carta-mcp serve --root .
+claude mcp add kooix-carta -- npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root .
 ```
 
 ## MCP 工具接口
@@ -91,7 +96,7 @@ npm test
 1. 更新 `packages/kooix-carta-mcp/package.json` 中的版本号。
 2. 提交代码并创建标签：`git tag vX.Y.Z`。
 3. 推送标签或在 GitHub 中创建 Release。
-4. 工作流会自动生成 `npm pack` 压缩包并附加到 Release，使用者可直接下载安装。
+4. 工作流会自动生成 `npm pack` 压缩包并附加到 Release，使用者可直接通过 `npx --yes https://.../kooix-carta-mcp-X.Y.Z.tgz serve` 运行。
 
 ## 许可证
 MIT

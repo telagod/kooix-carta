@@ -4,6 +4,28 @@
 
 `@kooix/carta-mcp` is a Model Context Protocol (MCP) server that standardises how IDE/agent clients discover project "cards" (file and directory metadata) and apply bounded edits inside annotated regions. It exposes four MCP tools ready for consumption by Codex CLI, Claude Code, Gemini CLI, OpenCode, and similar runtimes.
 
+## Installation & Quick Start
+You can run the server straight from a GitHub release tarball without a permanent install:
+
+```bash
+npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root . --audit jsonl
+```
+
+Replace `v0.1.0` with the desired release tag. `npx` downloads the packaged artifact, runs the `carta-mcp` CLI, and discards it afterwards. To pin in scripts, reference the exact versioned asset URL.
+
+For offline or repeat usage you can install the tarball locally:
+
+```bash
+npm install https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz
+npx –y carta-mcp serve --root . --audit jsonl
+```
+
+Optional SQLite audit mode requires:
+
+```bash
+npm install better-sqlite3 --save-optional
+```
+
 ## Features
 - **Card discovery** – scan repositories for `@SFC` (single file) and `@DFC` (directory) YAML headers, plus `LLM-EDIT` blocks with line offsets and content hashes.
 - **Optimistic block edits** – enforce hash checks, boundary protection, and newline normalisation before writing back to disk.
@@ -11,22 +33,9 @@
 - **Read-only guardrail** – `--read-only` mode blocks writes while still serving metadata.
 - **Typed SDK integration** – implemented in TypeScript with MCP stdio transport and a CLI launcher.
 
-## Installation
-1. Download the latest packaged tarball from the [GitHub Releases](https://github.com/telagod/kooix-carta/releases) page. Each release publishes a `kooix-carta-mcp-*.tgz` asset.
-2. Install the tarball locally:
-   ```bash
-   npm install /path/to/kooix-carta-mcp-x.y.z.tgz
-   # or reference the release asset URL directly
-   npm install https://github.com/telagod/kooix-carta/releases/download/vx.y.z/kooix-carta-mcp-x.y.z.tgz
-   ```
-3. Optional: install `better-sqlite3` if you plan to use SQLite audit mode:
-   ```bash
-   npm install better-sqlite3 --save-optional
-   ```
-
 ## CLI usage
 ```bash
-npx @kooix/carta-mcp serve --root . --audit jsonl
+npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root . --audit jsonl
 ```
 
 | Option | Default | Description |
@@ -37,7 +46,7 @@ npx @kooix/carta-mcp serve --root . --audit jsonl
 
 Register the CLI with your preferred MCP client, for example:
 ```bash
-claude mcp add kooix-carta -- npx -y @kooix-carta-mcp serve --root .
+claude mcp add kooix-carta -- npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.1.0/kooix-carta-mcp-0.1.0.tgz serve --root .
 ```
 
 ## Exposed MCP tools
@@ -108,7 +117,7 @@ Two GitHub workflows are provided:
 1. Bump the version in `packages/kooix-carta-mcp/package.json`.
 2. Commit changes and tag the release (`git tag vX.Y.Z`).
 3. Push the tag or create a GitHub Release.
-4. The `Release` workflow will package the project and attach `npm pack` tarballs to the published release; downloaders can install the asset directly with `npm install`.
+4. The `Release` workflow packages the project and attaches `npm pack` tarballs to the published release; consumers can run the server via `npx --yes https://.../kooix-carta-mcp-X.Y.Z.tgz serve`.
 
 ## License
 MIT
