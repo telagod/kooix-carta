@@ -18,24 +18,29 @@
 
 ## 🚀 Quick Start
 
-### Run from Release (Recommended)
+### Install from GitHub Packages (Recommended)
 
-No installation required - run directly from GitHub releases:
+Install directly from GitHub's npm registry:
+
+```bash
+npm install @kooix/carta-mcp@latest --registry=https://npm.pkg.github.com
+npx carta-mcp serve --root . --audit jsonl
+```
+
+Or configure npm to use GitHub Packages for this scope:
+
+```bash
+npm config set @kooix:registry https://npm.pkg.github.com
+npm install @kooix/carta-mcp@latest
+npx carta-mcp serve --root . --audit jsonl
+```
+
+### One-Time Run (Alternative)
+
+No installation - run directly from GitHub releases:
 
 ```bash
 npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz serve --root . --audit jsonl
-```
-
-### Local Installation
-
-For offline usage or development:
-
-```bash
-# Install from release tarball
-npm install https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz
-
-# Run the server
-npx carta-mcp serve --root . --audit jsonl
 ```
 
 ### SQLite Audit (Optional)
@@ -66,7 +71,17 @@ carta-mcp serve [options]
 
 #### Claude Desktop
 
-Add to your MCP configuration:
+Add to your MCP configuration after installing from GitHub Packages:
+
+```bash
+# First install the package
+npm install @kooix/carta-mcp@latest --registry=https://npm.pkg.github.com
+
+# Then add to Claude
+claude mcp add kooix-carta -- npx carta-mcp serve --root .
+```
+
+Or use the one-time run method:
 
 ```bash
 claude mcp add kooix-carta -- npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz serve --root .

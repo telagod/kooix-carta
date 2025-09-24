@@ -20,24 +20,29 @@
 
 ## 🚀 快速开始
 
-### 从发布版本运行（推荐）
+### 从 GitHub Packages 安装（推荐）
+
+直接从 GitHub 的 npm 仓库安装：
+
+```bash
+npm install @kooix/carta-mcp@latest --registry=https://npm.pkg.github.com
+npx carta-mcp serve --root . --audit jsonl
+```
+
+或者配置 npm 为此作用域使用 GitHub Packages：
+
+```bash
+npm config set @kooix:registry https://npm.pkg.github.com
+npm install @kooix/carta-mcp@latest
+npx carta-mcp serve --root . --audit jsonl
+```
+
+### 一次性运行（备选）
 
 无需安装 - 直接从 GitHub 发布版本运行：
 
 ```bash
 npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz serve --root . --audit jsonl
-```
-
-### 本地安装
-
-用于离线使用或开发：
-
-```bash
-# 从发布包安装
-npm install https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz
-
-# 运行服务器
-npx carta-mcp serve --root . --audit jsonl
 ```
 
 ### SQLite 审计（可选）
@@ -68,7 +73,17 @@ carta-mcp serve [选项]
 
 #### Claude Desktop
 
-添加到您的 MCP 配置：
+安装 GitHub Packages 后添加到您的 MCP 配置：
+
+```bash
+# 首先安装包
+npm install @kooix/carta-mcp@latest --registry=https://npm.pkg.github.com
+
+# 然后添加到 Claude
+claude mcp add kooix-carta -- npx carta-mcp serve --root .
+```
+
+或者使用一次性运行方法：
 
 ```bash
 claude mcp add kooix-carta -- npx --yes https://github.com/telagod/kooix-carta/releases/download/v0.2.0/kooix-carta-mcp-0.2.0.tgz serve --root .
