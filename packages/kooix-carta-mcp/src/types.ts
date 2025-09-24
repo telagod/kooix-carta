@@ -10,6 +10,13 @@ export interface ScanRequest {
   root?: string;
   include?: string[];
   exclude?: string[];
+  autoGenerate?: boolean;
+  generateOptions?: {
+    template?: 'minimal' | 'detailed';
+    inferFromPath?: boolean;
+    inferFromContent?: boolean;
+    dryRun?: boolean;
+  };
 }
 
 export interface ScanCardInfo {
@@ -32,10 +39,19 @@ export interface ScanFileEntry {
   dfc: ScanCardInfo;
   editBlocks: EditBlockInfo[];
   sha256: string;
+  generated?: {
+    sfc?: boolean;
+    dfc?: boolean;
+  };
 }
 
 export interface ScanResponse {
   files: ScanFileEntry[];
+  generated?: {
+    count: number;
+    files: string[];
+    dryRun?: boolean;
+  };
 }
 
 export interface CardDetail {

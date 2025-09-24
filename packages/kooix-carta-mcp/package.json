@@ -1,7 +1,7 @@
 {
   "name": "@kooix/carta-mcp",
-  "version": "0.1.0",
-  "description": "MCP server exposing cards.scan, cards.get, edits.apply, and io.readlog.append for kooix-carta",
+  "version": "0.2.0",
+  "description": "MCP server with intelligent auto-generation of project cards and controlled editing capabilities",
   "type": "module",
   "main": "dist/server.js",
   "types": "dist/types.d.ts",

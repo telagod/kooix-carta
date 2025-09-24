@@ -20,7 +20,7 @@ import { ApplyPatchRequest, AppendReadLogRequest, ScanRequest, ServerOptions } f
 const TOOL_DEFINITIONS = [
   {
     name: "cards.scan",
-    description: "Scan for @SFC/@DFC headers and LLM-EDIT blocks",
+    description: "Scan for @SFC/@DFC headers and LLM-EDIT blocks with optional auto-generation",
     inputSchema: {
       type: "object",
       properties: {
@@ -35,6 +35,21 @@ const TOOL_DEFINITIONS = [
           items: { type: "string" },
           description: "Additional glob patterns to exclude",
         },
+        autoGenerate: { type: "boolean", description: "Automatically generate missing SFC/DFC cards" },
+        generateOptions: {
+          type: "object",
+          properties: {
+            template: {
+              type: "string",
+              enum: ["minimal", "detailed"],
+              description: "Template style for generated cards"
+            },
+            inferFromPath: { type: "boolean", description: "Infer card properties from file path" },
+            inferFromContent: { type: "boolean", description: "Infer card properties from file content" },
+            dryRun: { type: "boolean", description: "Preview generation without writing files" }
+          },
+          description: "Options for auto-generation"
+        }
       },
     },
   },
@@ -99,6 +114,26 @@ function ensureString(value: unknown, field: string): string {
   throw invalidParams(`Expected string for ${field}`);
 }
 
+function ensureOptionalBoolean(value: unknown, field: string): boolean | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value === "boolean") {
+    return value;
+  }
+  throw invalidParams(`Expected boolean for ${field}`);
+}
+
+function ensureOptionalObject(value: unknown, field: string): Record<string, unknown> | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
+  throw invalidParams(`Expected object for ${field}`);
+}
+
 function ensureOptionalString(value: unknown, field: string): string | undefined {
   if (value === undefined) {
     return undefined;
@@ -141,10 +176,19 @@ function toToolResponse(data: unknown) {
 async function handleTool(name: ToolName, args: Record<string, unknown> | undefined, context: CartaContext) {
   switch (name) {
     case "cards.scan": {
+      const generateOptions = ensureOptionalObject(args?.generateOptions, "generateOptions");
+
       const request: ScanRequest = {
         root: ensureOptionalString(args?.root, "root"),
         include: ensureStringArray(args?.include, "include"),
         exclude: ensureStringArray(args?.exclude, "exclude"),
+        autoGenerate: ensureOptionalBoolean(args?.autoGenerate, "autoGenerate"),
+        generateOptions: generateOptions ? {
+          template: ensureOptionalString(generateOptions.template, "generateOptions.template") as 'minimal' | 'detailed' | undefined,
+          inferFromPath: ensureOptionalBoolean(generateOptions.inferFromPath, "generateOptions.inferFromPath"),
+          inferFromContent: ensureOptionalBoolean(generateOptions.inferFromContent, "generateOptions.inferFromContent"),
+          dryRun: ensureOptionalBoolean(generateOptions.dryRun, "generateOptions.dryRun")
+        } : undefined
       };
       const result = await scanRepo(context.root, request);
       return toToolResponse(result);
