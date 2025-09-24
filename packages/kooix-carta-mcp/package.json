@@ -1,0 +1,41 @@
+{
+  "name": "@kooix/carta-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing cards.scan, cards.get, edits.apply, and io.readlog.append for kooix-carta",
+  "type": "module",
+  "main": "dist/server.js",
+  "types": "dist/types.d.ts",
+  "bin": {
+    "carta-mcp": "dist/bin/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rimraf dist",
+    "dev": "tsx watch src/server.ts",
+    "serve": "node dist/bin/cli.js",
+    "prepublishOnly": "npm run build",
+    "test": "vitest"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.4.0",
+    "diff": "^5.1.0",
+    "fast-glob": "^3.3.2"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2",
+    "@types/node": "^20.11.24",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
